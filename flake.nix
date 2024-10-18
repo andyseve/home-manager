@@ -26,7 +26,6 @@
       mkHost = host: hostConfig: {
         name = "stranger@${host}";
         value = inputs.home-manager.lib.homeManagerConfiguration {
-          system = hostConfig.system;
           pkgs = import inputs.nixpkgs {
             system = hostConfig.system;
             config.allowUnfree = hostConfig.unfree;
