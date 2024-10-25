@@ -49,7 +49,6 @@
           value =
             (inputs.treefmt-nix.lib.evalModule (inputs.nixpkgs.legacyPackages.${system}) ./treefmt.nix)
             .config.build.wrapper;
-          # value = inputs.nixpkgs.legacyPackages.${system}.treefmt;
         }) inputs.nixos-config.systems
       );
     };
