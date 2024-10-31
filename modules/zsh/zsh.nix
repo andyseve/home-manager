@@ -13,27 +13,21 @@ let
 		ripgrep
 		silver-searcher
 		zsh
+		zsh-powerlevel10k
 		zsh-completions
 		zsh-autocomplete
 		zsh-autosuggestions
 		zsh-syntax-highlighting
 	];
-in {
+in rec {
 	home.packages = dependencies;
 	programs.zsh = {
 		enable = true;
-		autosuggestion.enable = true;
-		enableCompletion = true;
 		dotDir = ".config/zsh";
-
-		history = {
-			# append = true;
-			expireDuplicatesFirst = true;
-			extended = true;
-			ignoreDups = true;
-			ignorePatterns = [ "rm *" ];
-			path = "${config.xdg.dataHome}/zsh/zsh_history";
-			share = false;
-		};
 	};
+	# Link files
+	home.activation.linkZsh = config.lib.dag.entryAfter ["writeBoundary"] ''
+		ln -sf ${toString ./.zshrc} ~/${programs.zsh.dotDir}/.zshrc
+		ln -s ${toString ./p10k.zsh} ~/${programs.zsh.dotDir}/p10k.zsh
+	'';
 }
