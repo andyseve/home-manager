@@ -15,6 +15,11 @@
 
     # Submodules
     zsh.url = "path:./modules/zsh";
+		zsh.inputs = {
+			nixpkgs.follows = "nixpkgs";
+			unstable.follows = "unstable";
+			home-manager.follows = "home-manager";
+		};
   };
 
   outputs =
@@ -32,8 +37,12 @@
               system = hostConfig.system;
               config.allowUnfree = hostConfig.unfree;
             };
+						inherit hostConfig;
+						zshConfig = {};
           };
-          modules = inputs.nixos-config.utils.listModules' (toString ./modules);
+          modules = [
+						inputs.zsh.homeModules.default
+					] ++ inputs.nixos-config.utils.listModules (toString ./modules);
         };
       };
     in
