@@ -10,16 +10,16 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manages configs and home directory
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Submodules
     zsh.url = "path:./modules/zsh";
-		zsh.inputs = {
-			nixpkgs.follows = "nixpkgs";
-			unstable.follows = "unstable";
-			home-manager.follows = "home-manager";
-		};
+    zsh.inputs = {
+      nixpkgs.follows = "nixpkgs";
+      unstable.follows = "unstable";
+      home-manager.follows = "home-manager";
+    };
   };
 
   outputs =
@@ -37,12 +37,12 @@
               system = hostConfig.system;
               config.allowUnfree = hostConfig.unfree;
             };
-						inherit hostConfig;
-						zshConfig = {};
+            inherit hostConfig;
+            zshConfig = { };
           };
           modules = [
-						inputs.zsh.homeModules.default
-					] ++ inputs.nixos-config.utils.listModules (toString ./modules);
+            inputs.zsh.homeModules.default
+          ] ++ inputs.nixos-config.utils.listModules (toString ./modules);
         };
       };
     in

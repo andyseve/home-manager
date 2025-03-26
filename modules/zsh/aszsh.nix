@@ -10,11 +10,11 @@ let
     mkEnableOption
     mkPackageOption
     mkOption
-		mkDefault
+    mkDefault
     mkIf
     mkMerge
-		foldl'
-		literalExpression
+    foldl'
+    literalExpression
     ;
   cfg = config.programs.aszsh;
   relToDotDir = file: (if (cfg.dotDir != null) then (cfg.dotDir + "/") else ".zsh/") + file;

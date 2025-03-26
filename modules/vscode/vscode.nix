@@ -5,4 +5,7 @@
   # automatically create vscode dirs per project that the global config since
   # the global config does nothing but clutter data.
   home.packages = [ pkgs.vscode ];
+  home.programs.vscode = {
+  	enable = true;
+  };
 }
