@@ -58,6 +58,11 @@ in
   options.programs.aszsh = {
     enable = mkEnableOption "Anish Sevekari's Z Shell config";
     package = mkPackageOption pkgs "zsh" { };
+    dotDir = mkOption {
+      type = types.nullOr types.str;
+      default = ".config/zsh";
+      description = "Target directory for zsh config and plugins.";
+    };
     plugins = mkOption {
       type = types.listOf pluginModule;
       default = [ ];
