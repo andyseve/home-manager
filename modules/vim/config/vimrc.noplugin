@@ -1,0 +1,205 @@
+" Author: Anish Sevekari
+" Last Updated: Sat 14 Mar 2020 04:13:30 PM EDT
+
+set nocompatible
+
+"                                                                           }}}
+" # Core Settings                                                           {{{
+  set background=dark
+	syntax enable
+  set synmaxcol=0
+  set encoding=utf-8
+  filetype plugin indent on
+	" Setting Colorscheme
+  if(has("gui_running"))
+    set background=dark
+    colorscheme solarized
+    if has("win64") || has("win32")
+      set guifont=Consolas:h10:cANSI
+			set visualbell
+    else
+      set guifont=Fira\ Code\ Regular\ 10
+    endif
+  else
+		set background=dark
+    colorscheme desert
+  endif
+
+  set backspace=indent,eol,start
+  set ruler " Display cursor position
+
+  " Numbering Settings and functions
+  set number
+  " Toggle between relative and absolute numbers
+  function! RelativeNumber()
+	  set number
+	  set relativenumber
+  endfunc
+  function! AbsoluteNumber()
+	  set norelativenumber
+	  set number
+  endfunc
+  " Autocommands to toggle between relative and absolute numbering
+	augroup AnishsNumber
+		autocmd!
+		autocmd FocusLost * call AbsoluteNumber()
+		autocmd FocusGained * call RelativeNumber()
+		autocmd BufLeave * call AbsoluteNumber()
+		autocmd BufEnter * call RelativeNumber()
+		autocmd InsertEnter * call AbsoluteNumber()
+		autocmd InsertLeave * call RelativeNumber()
+	augroup END
+
+  set confirm              " Exit confirmation
+  set wildmenu
+  set wildmode=full
+  set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+	set showcmd              " Show (partial) command in status line
+  set showmatch            " Highlight matching braces
+  set modeline             " Enables modlines (File specific vim settings)
+  set modelines=1          " Read only the last line for vim specific options
+  set autoread             " Read changes from outside automatically
+	set autowrite            " Automatically save before commands like :next and :make
+  set nomousehide          " To fix a bug that causes cursor to dissapear
+  set mouse=a              " Enable mouse
+  set textwidth=0          " Textwidth to infinite
+  set spelllang=en_us      " Set US English for spellchecking
+  set nospell
+  set viewoptions-=options " Excludes options (like working dir) from view
+  set updatetime=1000
+	set hidden               " Hide buffers when they are abandoned
+
+  let mapleader = "\\"
+
+  " Gui Options
+  set guioptions-=L " Remove left scrollbar
+  set guioptions-=T " Remove Toolbar
+  set guioptions-=m " Remove Menubar
+
+
+  " Back up directories
+  if has("win64") || has("win32")
+	set undodir=~/vimfiles/.undo//
+	set backupdir=~/vimfiles/.backup//
+	set directory=~/vimfiles/.swp//
+	set viewdir=~/vimfiles/view//
+  else
+	set undodir=~/.vim/.undo//
+	set backupdir=~/.vim/.backup//
+	set directory=~/.vim/.swp//
+	set viewdir=~/.vim/view//
+  endif
+
+"                                                                           }}}
+" # Indent Settings                                                         {{{
+  set autoindent
+  set smartindent
+  set breakindent
+  set showbreak=↳\
+
+  set shiftwidth=2
+  set softtabstop=2
+  set tabstop=2
+  set noexpandtab
+
+"                                                                           }}}
+" # Search Settings                                                         {{{
+  set hlsearch " Highlight searches
+  set incsearch " Incremental search (As characters are entered)
+	set ignorecase " Do case insensitive matching
+	set smartcase " Do smart case matching
+
+"                                                                           }}}
+" # Fold Settings                                                           {{{
+  set foldenable
+  set foldlevelstart=3
+	
+"                                                                           }}}
+" # Generic Bindings and Shortcuts                                          {{{
+  nnoremap :W :w
+  nnoremap :Q :q
+	nnoremap -d dd
+	nnoremap -c ddO
+
+	" Movements
+  nnoremap j gj
+  nnoremap k gk
+  vnoremap j gj
+  vnoremap k gk
+
+  " Hotkeys for saving in gvim
+  if(has("gui_running"))
+    nnoremap <c-s> :update<CR>
+    vnoremap <c-s> <c-c>:update<CR>
+    inoremap <c-s> <c-o>:update<CR>
+  endif
+
+  " Backspace to delete words
+  imap <c-backspace> <c-o>:normal dbx<CR>
+	nmap <c-backspace> dbx
+
+
+	" Global Copy and Paste
+	noremap <leader>p "+gP
+	noremap <leader>y "+y
+
+
+	" Quick Edits
+	nmap <leader>es :UltiSnipsEdit<CR>
+	nmap <leader>ev :vsplit ~/.vimrc<CR>
+	nmap <leader>el :vsplit ~/.config/zsh/latex/anishs.sty<CR>
+	nmap <leader>ez :vsplit ~/.zshrc<CR>
+
+	" Remove search highlight
+	nmap <leader>h :nohlsearch<CR>
+
+	" Quick Source
+	if(has("win64") || has("win32"))
+		nnoremap sv :source ~/_vimrc<CR>
+	else
+		nnoremap sv :source ~/.vimrc<CR>
+	endif
+
+	" Quick lists
+	nnoremap <leader>oo :cwindow
+	nnoremap <leader>ol :lwindow
+
+"                                                                           }}}
+" # Functions                                                               {{{
+  " Update last modified entries
+  function! UpdateLastModified()
+    " TODO: Delete the update search
+    let b:cur_window = winsaveview()
+    let b:last_line = line('$')
+    if(b:last_line > 20)
+      let b:last_line = 20
+    endif
+    let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
+    execute cmd
+    :nohlsearch
+    call winrestview(b:cur_window)
+  endfunc
+
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
+
+"                                                                           }}}
+" # Autocommands                                                            {{{
+  augroup Anishs
+    autocmd!
+		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		autocmd BufWinEnter ?* silent loadview
+    " Update last modified tags at start of the file
+    autocmd BufWritePre * silent! call UpdateLastModified() | redraw
+    autocmd BufEnter * :nohlsearch
+  augroup END
+
+"                                                                           }}}
+
+" vim:foldmethod=marker:ft=vim

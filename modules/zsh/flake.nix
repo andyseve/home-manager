@@ -9,15 +9,20 @@
 
   outputs = { self, ... }: {
     homeModules.default =
-      { config, ... }:
-      let
-        mkLink = config.lib.file.mkOutOfStoreSymlink;
-        zshDir = toString ./.;
-      in
       {
-        xdg.configFile."zsh/.zshrc".source = mkLink "${zshDir}/.zshrc";
-        xdg.configFile."zsh/.zshenv".source = mkLink "${zshDir}/.zshenv";
-        xdg.configFile."zsh/p10k.zsh".source = mkLink "${zshDir}/p10k.zsh";
+        config,
+        pkgs,
+        ...
+      }:
+      {
+        programs.zsh.enable = true;
+        home.packages = [ pkgs.zsh ];
+        home.sessionVariables.ZDOTDIR = "${config.xdg.configHome}/zsh";
+
+        xdg.configFile."zsh" = {
+          source = ./config;
+          recursive = true;
+        };
       };
   };
 }

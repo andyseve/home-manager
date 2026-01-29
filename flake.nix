@@ -13,13 +13,6 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Submodules
-    zsh.url = "path:./modules/zsh";
-    zsh.inputs = {
-      nixpkgs.follows = "nixpkgs";
-      unstable.follows = "unstable";
-      home-manager.follows = "home-manager";
-    };
   };
 
   outputs =
@@ -40,9 +33,7 @@
             inherit hostConfig;
             zshConfig = { };
           };
-          modules = [
-            inputs.zsh.homeModules.default
-          ] ++ inputs.nixos-config.utils.listModules (toString ./modules);
+          modules = inputs.nixos-config.utils.listModules (toString ./modules);
         };
       };
     in

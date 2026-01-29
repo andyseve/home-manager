@@ -1,0 +1,91 @@
+" Author: Anish Sevekari
+" Last Updated: Mon 10 Jan 2022 01:35:37 AM EST
+ 
+
+set nocompatible
+
+" # vim-plug                                                                 
+  " change installation paths based on os
+  if !exists("g:bundle_path")
+    if has("win64") || has("win32")
+      let g:bundle_path = '~/vimfiles/bundle'
+    else
+      let g:bundle_path = '~/.vim/bundle'
+    endif
+  endif
+
+  function! BuildYCM(info)
+    " Builds ycm only when forced, installed or updated
+    if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
+			if has("win64") || has("win32")
+				!python3 "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+			else
+				!python3 "$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer"
+			endif
+    endif
+  endfunc
+
+  call plug#begin(bundle_path)
+  Plug 'hecal3/vim-leader-guide'
+	Plug 'neoclide/coc.nvim',								{ 'branch': 'release' }
+	Plug 'lervag/vimtex',                   { 'for': 'latex' }
+  Plug 'sjl/gundo.vim'
+  Plug 'mileszs/ack.vim'
+  Plug 'junegunn/fzf',                    { 'do':'./install --bin' }
+  Plug 'junegunn/fzf.vim'
+  Plug 'tpope/vim-fugitive'
+	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
+  Plug 'jiangmiao/auto-pairs'
+	Plug 'tpope/vim-surround'
+	Plug 'preservim/nerdtree'
+	Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'kyazdani42/nvim-web-devicons' " for file icons
+	Plug 'kyazdani42/nvim-tree.lua'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'godlygeek/tabular'
+  Plug 'tpope/vim-repeat'
+	Plug 'tpope/vim-dispatch'
+	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
+	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
+	Plug 'Konfekt/FastFold'
+	Plug 'LnL7/vim-nix',                    { 'for': 'nix' }
+
+	call plug#end()
+
+let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+
+
+let g:config_file_list = [
+			\'globals.vim',
+			\'options.vim',
+			\'autocommands.vim',
+			\'utils.vim',
+			\'ui.vim',
+			\'keys.vim'
+			\]
+
+for s:fname in g:config_file_list
+	execute printf('source %s/core/%s', g:config_root, s:fname)
+endfor
+
+
+let g:config_plugin_list = [
+			\'vim_leader.vim',
+			\'coc.vim',
+			\'vimtex.vim',
+			\'gundo.vim',
+			\'fzf_ag.vim',
+			\'fugitive.vim',
+			\'nerdtree.vim',
+			\'nerd_commenter.vim',
+			\'airline.vim'
+			\]
+
+for s:fname in g:config_plugin_list
+	execute printf('source %s/config/%s', g:config_root, s:fname)
+endfor
+
+" vim:foldmethod=marker:syntax=vim
