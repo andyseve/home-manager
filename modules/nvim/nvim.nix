@@ -11,7 +11,6 @@ let
 in
 {
   programs.neovim.enable = true;
-  programs.neovim.package = pkgs.neovim;
 
   home.activation.linkNvimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -e ${lib.escapeShellArg nvimSource} ]; then

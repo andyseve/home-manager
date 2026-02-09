@@ -3,7 +3,7 @@
 -- Last Modified: Mon 06 Mar 2023 11:09:57 PM EST
 
 -- n, v, i are mode names
--- supports whichkey through load_mappings defined in utils
+-- supports clue hints through load_mappings defined in utils
 
 vim.g.mapleader = "\\"
 
@@ -98,7 +98,7 @@ mappings.lists = {
 
 if not plugins.telescope then
 	mappings.lists.n["w"] = { "<cmd> lwindow <CR>", " Locations" }
-	mappings.litst.n["q"] = { "<cmd> cwindow <CR>", " Quickfix" }
+	mappings.lists.n["q"] = { "<cmd> cwindow <CR>", " Quickfix" }
 end
 
 mappings.windows = {

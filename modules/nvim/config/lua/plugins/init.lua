@@ -4,25 +4,6 @@ local utils = require("core.utils")
 Spec = {
 	-- UI
 	{
-		"akinsho/bufferline.nvim",
-		enabled = plugins.bufferline,
-		lazy = false,
-		dependencies = "nvim-tree/nvim-web-devicons",
-		config = function() require("config.bufferline") end,
-	},
-	{
-		"nvim-lualine/lualine.nvim",
-		enabled = plugins.lualine,
-		lazy = false,
-		config = function() require("config.lualine") end,
-	},
-	{
-		"rcarriga/nvim-notify",
-		enabled = plugins.notify,
-		lazy = true,
-		config = function() require("config.notify") end,
-	},
-	{
 		"folke/noice.nvim",
 		enabled = plugins.noice,
 		lazy = true,
@@ -32,19 +13,6 @@ Spec = {
 		},
 		event = "VeryLazy",
 		config = function() require("config.noice") end,
-	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		enabled = plugins.blankline,
-		lazy = true,
-		event = "VeryLazy",
-		config = function() require("config.blankline") end,
-	},
-	{
-		"folke/which-key.nvim",
-		enabled = plugins.whichkey,
-		lazy = false,
-		config = function() require("config.whichkey") end,
 	},
 	{
 		"folke/zen-mode.nvim",
@@ -73,6 +41,12 @@ Spec = {
 		lazy = false,
 		config = function() require("config.twilight") end,
 	},
+	{
+		"echasnovski/mini.nvim",
+		enabled = plugins.mini,
+		lazy = false,
+		config = function() require("config.mini") end,
+	},
 	-- Themes
 	{
 		"Tsuzat/NeoSolarized.nvim",
@@ -100,33 +74,6 @@ Spec = {
 	},
 	-- Search and files
 	{
-		"nvim-telescope/telescope.nvim",
-		enabled = plugins.telescope,
-		lazy = true,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope-file-browser.nvim",
-			"tsakirist/telescope-lazy.nvim",
-			"ghassan0/telescope-glyph.nvim",
-			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-			{ "kelly-lin/telescope-ag",                   enabled = utils.is_exe("ag") },
-			{ "debugloop/telescope-undo.nvim",            enabled = not plugins.undotree },
-			{ "fhill2/telescope-ultisnips.nvim",          enabled = plugins.ultisnips, },
-			{ "benfowler/telescope-luasnip.nvim",         enabled = plugins.luasnip, },
-		},
-		cmd = 'Telescope',
-		init = function() require("setup.telescope") end,
-		config = function() require("config.telescope") end,
-	},
-	{
-		"nvim-tree/nvim-tree.lua",
-		dependencies = "nvim-tree/nvim-web-devicons",
-		cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
-		event = "User DirOpened",
-		init = function() require("setup.nvimtree") end,
-		config = function() require("config.nvimtree") end,
-	},
-	{
 		"mbbill/undotree",
 		enabled = plugins.undotree,
 		lazy = true,
@@ -144,33 +91,6 @@ Spec = {
 	},
 	-- Syntax
 	{
-		"windwp/nvim-autopairs",
-		enabled = plugins.autopairs,
-		lazy = true,
-		event = { 'InsertEnter' },
-		config = function() require("config.autopairs") end,
-	},
-	{
-		"andymass/vim-matchup",
-		enabled = plugins.matchup,
-		lazy = true,
-		event = { 'BufWinEnter' },
-	},
-	{
-		"kylechui/nvim-surround",
-		enabled = plugins.surround,
-		lazy = true,
-		event = { 'BufWinEnter' },
-		config = function() require("config.surround") end,
-	},
-	{
-		"norcalli/nvim-colorizer.lua",
-		enabled = plugins.colorizer,
-		lazy = true,
-		event = { 'BufRead' },
-		config = function() require("config.colorizer") end,
-	},
-	{
 		"nvim-treesitter/nvim-treesitter",
 		enabled = plugins.treesitter,
 		lazy = true,
@@ -181,12 +101,6 @@ Spec = {
 			"nvim-treesitter/nvim-treesitter-refactor",
 		},
 		config = function() require("config.treesitter") end,
-	},
-	{
-		"numToStr/Comment.nvim",
-		enabled = plugins.comment,
-		lazy = false,
-		config = function() require("config.comment") end,
 	},
 	-- Autocomplete, linting and snippets
 	{
@@ -283,27 +197,11 @@ Spec = {
 	},
 	-- Utils
 	{
-		"godlygeek/tabular",
-		enabled = plugins.tabular,
-		lazy = false,
-	},
-	{
 		"Konfekt/FastFold",
 		enabled = plugins.fast_fold,
 		lazy = false,
 		-- Not needed since the folding issue was patched
 		-- https://github.com/neovim/neovim/issues/5270
-	},
-	{
-		'famiu/bufdelete.nvim',
-		enabled = plugins.bufdelete,
-		lazy = false,
-	},
-	{
-		"ggandor/leap.nvim",
-		enabled = plugins.leap,
-		lazy = false,
-		config = function() require("config.leap") end,
 	},
 	{
 		"lewis6991/impatient.nvim",
@@ -327,13 +225,6 @@ Spec = {
 			vim.fn["mkdp#util#install"]()
 		end,
 	},
-	{
-		"goolord/alpha-nvim",
-		enabled = plugins.alpha,
-		lazy = false,
-		dependencies = "nvim-tree/nvim-web-devicons",
-		config = function() require("config.alpha") end,
-	}
 }
 
 return Spec

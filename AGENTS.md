@@ -17,6 +17,12 @@
 - File layout: One module per file; name files after the program (`modules/git/git.nix`, etc.).
 - Symlinks: For live dotfile edits, use `config.lib.file.mkOutOfStoreSymlink` and point to files in the repo (see `modules/zsh/flake.nix`).
 
+## Neovim
+- Mapping sources: core mappings live in `modules/nvim/config/lua/core/keymaps.lua`; feature-specific mappings live in `modules/nvim/config/lua/setup/*.lua`.
+- Keymap registration: use `utils.load_mappings(...)` from `modules/nvim/config/lua/core/utils.lua` so descriptions and prefixes are collected.
+- Hinting system: `mini.clue` consumes mapping metadata via `utils.get_mapping_clues()` in `modules/nvim/config/lua/config/mini/clue.lua`.
+- When adding new keybinds, prefer `setup/*.lua` + `utils.load_mappings` to keep clue hints accurate.
+
 ## Testing Guidelines
 - Primary checks are declarative: `nix flake check` and `home-manager switch --flake ... --dry-run` before applying.
 - Add module-specific sanity assertions (e.g., `assertions = [ { assertion = ...; message = "..."; } ];`) when introducing risky options.

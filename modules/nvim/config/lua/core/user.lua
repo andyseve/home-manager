@@ -9,12 +9,12 @@
 local user = {}
 user.plugins = {
 	-- ui
-	bufferline = true,
-	lualine    = true,
-	notify     = true,
+	bufferline = false,
+	lualine    = false,
+	notify     = false,
 	noice      = true,
-	blankline  = true,
-	whichkey   = true,
+	blankline  = false,
+	whichkey   = false,
 	zenmode    = true,
 	gitsigns   = true,
 	trouble    = true,
@@ -27,18 +27,18 @@ user.plugins = {
 	base16     = false,
 
 	-- search and files
-	telescope = true,
-	nvimtree  = true,
+	telescope = false,
+	nvimtree  = false,
 	undotree  = nil, -- use telescope plugin instead
 	diffview  = true,
 
 	-- syntax
-	autopairs  = true,
-	matchup    = true,
-	surround   = true,
-	colorizer  = true,
+	autopairs  = false,
+	matchup    = false,
+	surround   = false,
+	colorizer  = false,
 	treesitter = true,
-	comment    = true,
+	comment    = false,
 
 	-- autocomplete and linting
 	coc          = false,
@@ -55,13 +55,31 @@ user.plugins = {
 	nix = true,
 
 	-- utils
-	tabular    = true,
+	tabular    = false,
 	fast_fold  = false,
-	bufdelete  = true,
-	leap       = true,
+	bufdelete  = false,
+	leap       = false,
 	impatient  = true,
 	toggleterm = true,
-	alpha      = true,
+	alpha      = false,
+
+	-- mini.nvim replacements
+	mini           = true,
+	mini_tabline   = true,
+	mini_statusline = true,
+	mini_notify    = true,
+	mini_indentscope = true,
+	mini_clue      = true,
+	mini_starter   = true,
+	mini_files     = true,
+	mini_pick      = true,
+	mini_bufremove = true,
+	mini_jump      = true,
+	mini_pairs     = true,
+	mini_surround  = true,
+	mini_comment   = true,
+	mini_align     = true,
+	mini_hipatterns = true,
 }
 
 

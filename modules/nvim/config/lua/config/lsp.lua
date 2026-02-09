@@ -4,22 +4,29 @@
 
 local utils = require("core.utils")
 
-local present, lsp = pcall(require, "lspconfig")
-if not present then
-	return
+-- keymaps (LspAttach)
+local lsp_keymaps = function(event)
+	local bufnr = event.buf
+	local opts = { noremap = true, silent = true, buffer = bufnr }
+
+	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+	vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
+	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+	vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
+
+	-- Enable completion triggered by <c-x><c-o>
+	vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+	local client = vim.lsp.get_client_by_id(event.data.client_id)
+	if client ~= nil then
+		local msg = string.format("Language server %s started!", client.name)
+		utils.inspect(msg)
+	end
 end
 
--- keymaps
-local lsp_keymaps = function(bufnr)
-	local opts = { noremap = true, silent = true }
-	local keymap = vim.api.nvim_buf_set_keymap
-	keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-	keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-	keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-end
+vim.api.nvim_create_autocmd("LspAttach", { callback = lsp_keymaps })
 
 -- TODO: Add this into a mapping table.
 -- keymap(bufnr, "n", "<leader>df", "<cmd>lua vim.lsp.buf.format{ async = true }<cr>", opts)
@@ -37,17 +44,6 @@ end
 -- key("n", "<leader>wl", function()
 --print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 --end, bufopts)
-
--- on attach function
-local on_attach = function(client, bufnr)
-	-- Mappings
-	lsp_keymaps(bufnr)
-
-	-- Enable completion triggered by <c-x><c-o>
-	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-	local msg = string.format("Language server %s started!", client.name)
-	utils.inspect(msg)
-end
 
 -- capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -82,65 +78,34 @@ local lsp_flags = {
 
 -- language server settings
 
-lsp.ccls.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = lsp_flags,
-	single_file_support = true,
-	init_options = {
-		compilationDatabaseDirectory = "build",
-		index = {
-			threads = 0,
-		},
-		clang = {
-			excludeArgs = { "-frounding-math" },
+local servers = {
+	ccls = {
+		init_options = {
+			compilationDatabaseDirectory = "build",
+			index = { threads = 0 },
+			clang = { excludeArgs = { "-frounding-math" } },
 		},
 	},
-}
-
-lsp.hls.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = lsp_flags,
-	single_file_support = true,
-}
-
-lsp.pyright.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = lsp_flags,
-	single_file_support = true,
-}
-
-lsp.lua_ls.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = lsp_flags,
-	single_file_support = true,
-	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = 'LuaJIT',
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { 'vim' },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
+	hls = {},
+	pyright = {},
+	lua_ls = {
+		settings = {
+			Lua = {
+				runtime = { version = "LuaJIT" },
+				diagnostics = { globals = { "vim" } },
+				workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+				telemetry = { enable = false },
 			},
 		},
 	},
+	rust_analyzer = {},
 }
 
-lsp.rust_analyzer.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = lsp_flags,
-}
+for server, cfg in pairs(servers) do
+	cfg.capabilities = capabilities
+	cfg.flags = lsp_flags
+	cfg.single_file_support = true
+	vim.lsp.config(server, cfg)
+end
+
+vim.lsp.enable(vim.tbl_keys(servers))

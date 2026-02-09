@@ -94,7 +94,8 @@ utils.load_mappings = function(mappings, opts)
 					section = section_name,
 					keybind = mapping_keybind,
 					cmd = mapping_info[1],
-					opts = mapping_opts
+					opts = mapping_opts,
+					mode = mode,
 				})
 			end
 		end
@@ -106,8 +107,23 @@ utils.load_mappings = function(mappings, opts)
 	end
 end
 
+utils.get_mapping_clues = function()
+	local clues = {}
+	for _, mapping in ipairs(_User_Mappings or {}) do
+		if mapping.mode ~= nil then
+			table.insert(clues, {
+				mode = mapping.mode,
+				keys = mapping.keybind,
+				desc = mapping.name,
+			})
+		end
+	end
+	return clues
+end
+
 -- Clear logfile and Insert date on top.
 local logfile = vim.fn.stdpath("cache") .. "/userconfig.log"
+vim.fn.mkdir(vim.fn.stdpath("cache"), "p")
 local logfile_w = assert(io.open(logfile, "w"))
 io.output(logfile_w)
 io.write(os.date() .. "\n")

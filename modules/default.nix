@@ -1,4 +1,9 @@
 { pkgs, ... }: {
+  imports = [
+    ./zsh/zsh.nix
+    ./nvim/nvim.nix
+  ];
+
   home.username = "stranger";
   home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/stranger" else "/home/stranger";
 
