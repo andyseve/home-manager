@@ -22,6 +22,8 @@
 - Keymap registration: use `utils.load_mappings(...)` from `modules/nvim/config/lua/core/utils.lua` so descriptions and prefixes are collected.
 - Hinting system: `mini.clue` consumes mapping metadata via `utils.get_mapping_clues()` in `modules/nvim/config/lua/config/mini/clue.lua`.
 - When adding new keybinds, prefer `setup/*.lua` + `utils.load_mappings` to keep clue hints accurate.
+- Mini transition: mini.nvim is the default for UI and QoL utilities; prefer mini modules for these categories and avoid adding non-mini alternatives unless there is a clear gap.
+- Mini toggles live in `modules/nvim/config/lua/core/user.lua`, specs in `modules/nvim/config/lua/plugins/init.lua`, and module config in `modules/nvim/config/lua/config/mini/`.
 
 ## Testing Guidelines
 - Primary checks are declarative: `nix flake check` and `home-manager switch --flake ... --dry-run` before applying.
