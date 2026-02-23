@@ -7,22 +7,24 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
   };
 
-  outputs = { self, ... }: {
-    homeModules.default =
-      {
-        config,
-        pkgs,
-        ...
-      }:
-      {
-        programs.zsh.enable = true;
-        home.packages = [ pkgs.zsh ];
-        home.sessionVariables.ZDOTDIR = "${config.xdg.configHome}/zsh";
+  outputs =
+    { ... }:
+    {
+      homeModules.default =
+        {
+          config,
+          pkgs,
+          ...
+        }:
+        {
+          programs.zsh.enable = true;
+          home.packages = [ pkgs.zsh ];
+          home.sessionVariables.ZDOTDIR = "${config.xdg.configHome}/zsh";
 
-        xdg.configFile."zsh" = {
-          source = ./config;
-          recursive = true;
+          xdg.configFile."zsh" = {
+            source = ./config;
+            recursive = true;
+          };
         };
-      };
-  };
+    };
 }

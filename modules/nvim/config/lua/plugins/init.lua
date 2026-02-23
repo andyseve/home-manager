@@ -89,6 +89,19 @@ Spec = {
 		cmd = { 'DiffViewOpen', 'DiffviewFileHistory' },
 		config = function() require("config.diffview") end,
 	},
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		enabled = plugins.neotree,
+		branch = "v3.x",
+		lazy = true,
+		cmd = "Neotree",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+		config = function() require("config.neotree") end,
+	},
 	-- Syntax
 	{
 		"nvim-treesitter/nvim-treesitter",

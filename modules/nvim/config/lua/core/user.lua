@@ -29,6 +29,7 @@ user.plugins = {
 	-- search and files
 	telescope = false,
 	nvimtree  = false,
+	neotree   = true,
 	undotree  = nil, -- use telescope plugin instead
 	diffview  = true,
 
@@ -71,7 +72,7 @@ user.plugins = {
 	mini_indentscope = true,
 	mini_clue      = true,
 	mini_starter   = true,
-	mini_files     = true,
+	mini_files     = false,
 	mini_pick      = true,
 	mini_bufremove = true,
 	mini_jump      = true,

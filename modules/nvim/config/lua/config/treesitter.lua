@@ -57,10 +57,6 @@ ts_configs.setup({
 		enable = true,
 	},
 
-	matchup = {
-		enable = true;
-	},
-
 	textobjects = {
 		select = {
 			enable = true,

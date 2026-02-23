@@ -1,7 +1,9 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     ./zsh/zsh.nix
     ./nvim/nvim.nix
+    ./kitty/kitty.nix
   ];
 
   home.username = "stranger";
