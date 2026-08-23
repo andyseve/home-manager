@@ -25,6 +25,10 @@ if [ ! -d $(dirname $ZINIT_HOME) ]; then
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
+ZSH_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+command mkdir -p "$ZSH_CACHE_HOME"
+ZINIT[ZCOMPDUMP_PATH]="$ZSH_CACHE_HOME/zcompdump-$ZSH_VERSION"
+
 # helper functions
 local function __bind_history_keys(){
 	bindkey "$terminfo[kcuu1]" history-substring-search-up
@@ -139,8 +143,10 @@ bindkey -v # Use vim keybindings
 
 
 # History
-# Keep 1000000 lines of history within the shell and save it to ~/.zsh_history:
-HISTFILE=$ZSH_HOME/zsh_history
+# Keep mutable shell state outside the live-linked config directory.
+ZSH_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
+command mkdir -p "$ZSH_STATE_HOME"
+HISTFILE="$ZSH_STATE_HOME/history"
 HISTSIZE=1000000
 HISTFILESIZE=1000000
 SAVEHIST=1000

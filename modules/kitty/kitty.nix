@@ -1,20 +1,35 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   repoRoot = "${config.home.homeDirectory}/.config/home-manager";
-  kittySource = "${repoRoot}/modules/kitty/config";
+  localSource = "${repoRoot}/modules/kitty/config";
+  storeSource = ./config;
   kittyTarget = "${config.xdg.configHome}/kitty";
 in
 {
+  home.packages = [ pkgs.kitty ];
+
   home.activation.linkKittyConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ ! -e ${lib.escapeShellArg kittySource} ]; then
-      echo "kitty config source missing: ${kittySource}" >&2
+    local_source=${lib.escapeShellArg localSource}
+    store_source=${lib.escapeShellArg storeSource}
+    target=${lib.escapeShellArg kittyTarget}
+
+    if [ -f "$local_source/kitty.conf" ]; then
+      source="$local_source"
+    else
+      source="$store_source"
+    fi
+
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+      echo "kitty config target exists and is not a symlink: $target" >&2
       exit 1
     fi
-    mkdir -p "$(dirname ${lib.escapeShellArg kittyTarget})"
-    ln -sfn ${lib.escapeShellArg kittySource} ${lib.escapeShellArg kittyTarget}
+
+    mkdir -p "$(dirname "$target")"
+    ln -sfn "$source" "$target"
   '';
 }
